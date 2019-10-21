@@ -23,10 +23,9 @@ class AquariumController {
     const aquarium = await Aquarium.findOne({ name });
 
     if (aquarium) {
-      aquarium.fictionalName = req.body.fictionalName;
-      // adicionar demais atributos
+      await Aquarium.updateOne({ name }, { ...req.body, owner: req.userId });
 
-      const updatedAquarium = await aquarium.save();
+      const updatedAquarium = await Aquarium.findOne({ name });
 
       res.json({ updatedAquarium, result: 'Aquarium updated!' });
     }
