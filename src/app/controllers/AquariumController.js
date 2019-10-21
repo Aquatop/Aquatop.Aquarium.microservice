@@ -1,5 +1,3 @@
-// import { CompressionTypes } from 'kafkajs';
-
 import Aquarium from '../schemas/Aquarium';
 
 class AquariumController {
