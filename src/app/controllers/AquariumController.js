@@ -33,31 +33,31 @@ class AquariumController {
     res.json({ error: 'Aquarium not found!' });
   }
 
-  // async index(req, res) {
-  //   const { name } = req.params;
+  async index(req, res) {
+    const { name } = req.params;
 
-  //   const message = { type: 'REQUEST_REPORT', aquarium: name };
+    const aquarium = await Aquarium.findOne({ name });
 
-  //   await req.producer.send({
-  //     topic: 'monitoring-websocket',
-  //     compression: CompressionTypes.GZIP,
-  //     messages: [{ value: JSON.stringify(message) }],
-  //   });
+    if (aquarium) {
+      res.json(aquarium);
+    }
 
-  //   const sleep = ms => {
-  //     return new Promise(resolve => setTimeout(resolve, ms));
-  //   };
+    res.json({ error: 'Aquarium not found!' });
+  }
 
-  //   await sleep(3000);
+  async list(req, res) {
+    const { owner } = req.query;
 
-  //   const aquarium = await Aquarium.findOne({ name });
+    const aquariums = await Aquarium.find({
+      owner: owner ? req.userId : 'owner',
+    });
 
-  //   if (aquarium) {
-  //     return res.json(aquarium);
-  //   }
+    if (aquariums) {
+      res.json(aquariums);
+    }
 
-  //   return res.json({ ok: false });
-  // }
+    res.json([]);
+  }
 }
 
 export default new AquariumController();

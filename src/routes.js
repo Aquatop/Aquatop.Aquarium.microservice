@@ -12,5 +12,7 @@ routes.use(authMiddleware);
 
 // Adicionar validator
 routes.put('/aquarium/:name', AquariumController.update);
+routes.get('/aquarium/:name', AquariumController.index);
+routes.get('/aquarium', AquariumController.list);
 
 export default routes;

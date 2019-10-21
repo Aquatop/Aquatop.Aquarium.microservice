@@ -33,12 +33,13 @@ const AquariumSchema = new mongoose.Schema(
     },
     owner: {
       type: String,
+      default: 'owner',
     },
   },
   { timestamps: true }
 );
 
-AquariumSchema.pre('save', async function(next) {
+AquariumSchema.pre('save', function(next) {
   let pin = '';
 
   for (let i = 0; i < 4; i++) {
