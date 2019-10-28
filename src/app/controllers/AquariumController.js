@@ -1,3 +1,5 @@
+import { CompressionTypes } from 'kafkajs';
+
 import Aquarium from '../schemas/Aquarium';
 
 class AquariumController {
@@ -25,10 +27,26 @@ class AquariumController {
 
       const updatedAquarium = await Aquarium.findOne({ name });
 
-      res.json({ updatedAquarium, result: 'Aquarium updated!' });
+      const message = {
+        type: 'CREATE_JOBS',
+        params: { name },
+        body: {
+          turnOnLights: updatedAquarium.turnOnLight,
+          turnOffLights: updatedAquarium.turnOffLight,
+          feedInterval: updatedAquarium.foodInterval,
+        },
+      };
+
+      await req.producer.send({
+        topic: 'aquarium-scheduling',
+        compression: CompressionTypes.GZIP,
+        messages: [{ value: JSON.stringify(message) }],
+      });
+
+      return res.json({ updatedAquarium, result: 'Aquarium updated!' });
     }
 
-    res.json({ error: 'Aquarium not found!' });
+    return res.json({ error: 'Aquarium not found!' });
   }
 
   async index(req, res) {
@@ -37,10 +55,10 @@ class AquariumController {
     const aquarium = await Aquarium.findOne({ name });
 
     if (aquarium) {
-      res.json(aquarium);
+      return res.json(aquarium);
     }
 
-    res.json({ error: 'Aquarium not found!' });
+    return res.json({ error: 'Aquarium not found!' });
   }
 
   async list(req, res) {
@@ -51,10 +69,10 @@ class AquariumController {
     });
 
     if (aquariums) {
-      res.json(aquariums);
+      return res.json(aquariums);
     }
 
-    res.json([]);
+    return res.json([]);
   }
 }
 
