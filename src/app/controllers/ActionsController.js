@@ -3,7 +3,7 @@ import { CompressionTypes } from 'kafkajs';
 import Aquarium from '../schemas/Aquarium';
 
 class ActionsController {
-  async store(req) {
+  async store(req, res) {
     const { name } = req.params;
     const { type } = req.body;
 
@@ -18,10 +18,10 @@ class ActionsController {
         messages: [{ value: JSON.stringify(message) }],
       });
 
-      return { result: 'Action was sent!' };
+      return res.json({ result: 'Action was sent!' });
     }
 
-    return { error: 'Aquarium not found!' };
+    return res.json({ error: 'Aquarium not found!' });
   }
 }
 
