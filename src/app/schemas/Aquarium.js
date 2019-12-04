@@ -20,7 +20,7 @@ const AquariumSchema = new mongoose.Schema(
       type: Number,
     },
     foodInterval: {
-      type: Number,
+      type: String,
     },
     turnOnLight: {
       type: String,
